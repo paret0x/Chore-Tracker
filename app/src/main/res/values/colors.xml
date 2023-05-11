@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="light_gray">#FFA0A0A0</color>
+    <color name="gray">#FF606060</color>
+    <color name="dark_gray">#FF202020</color>
+    <color name="white_tint">#FFF0F4FF</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="light_red">#FFD03030</color>
+    <color name="dark_red">#FFA00000</color>
+    <color name="light_blue">#FF6060FF</color>
+    <color name="dark_blue">#FF1010F0</color>
+
+    <color name="backgroundColor">@color/white_tint</color>
+    <color name="accentColor">@color/white</color>
+    <color name="textColor">@color/black</color>
+    <color name="grayTextColor">@color/gray</color>
+    <color name="blueTextColor">@color/light_blue</color>
+    <color name="redTextColor">@color/light_red</color>
+    <color name="checkboxColor">@color/black</color>
+</resources>

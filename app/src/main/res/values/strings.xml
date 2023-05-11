@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Chore Tracker</string>
+    <string name="enter_new_chore_here">Enter new chore here</string>
+</resources>

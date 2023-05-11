@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="customAttrs">
+        <attr name="actionDeleteIcon" format="reference" />
+        <attr name="actionCalendarIcon" format="reference" />
+        <attr name="actionCheckedIcon" format="reference" />
+        <attr name="actionDashboardIcon" format="reference" />
+        <attr name="actionTasksIcon" format="reference" />
+        <attr name="actionAddIcon" format="reference" />
+        <attr name="actionEditIcon" format="reference" />
+    </declare-styleable>
+</resources>
