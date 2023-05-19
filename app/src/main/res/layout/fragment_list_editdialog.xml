@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/container_corners"
+    android:orientation="vertical"
+    android:padding="6dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/fragment_list_editdialog_title"
+        android:textColor="@color/textColor"
+        android:textSize="18sp"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/fragment_list_editdialog_name_field"
+        android:maxLines="1"
+        android:lines="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:textColor="@color/textColor"
+        android:textSize="16sp"
+        android:hint="@string/chore_name_hint"
+        android:textColorHint="@color/grayTextColor"
+        android:importantForAutofill="no"/>
+
+    <FrameLayout
+        android:layout_marginTop="6dp"
+        android:layout_marginStart="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/fragment_list_editdiaglog_room_text"
+            android:layout_gravity="start"
+            android:textSize="16sp"
+            android:textColor="@color/textColor"
+            android:text="Room"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Spinner
+            android:id="@+id/fragment_list_editdialog_room_dropdown"
+            android:layout_gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_marginTop="6dp"
+        android:layout_marginStart="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/fragment_list_editdiaglog_freq_text"
+            android:layout_gravity="start"
+            android:textSize="16sp"
+            android:textColor="@color/textColor"
+            android:text="Frequency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Spinner
+            android:id="@+id/fragment_list_editdialog_freq_dropdown"
+            android:layout_gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_marginTop="6dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/fragment_list_editdialog_save"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:text="Save"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:id="@+id/fragment_list_editdialog_delete"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:text="Delete"
+            style="?android:attr/buttonBarButtonStyle"/>
+
+        <Button
+            android:id="@+id/fragment_list_editdialog_cancel"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:text="Cancel"
+            style="?android:attr/buttonBarButtonStyle" />
+
+    </LinearLayout>
+
+</LinearLayout>

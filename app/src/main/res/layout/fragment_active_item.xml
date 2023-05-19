@@ -6,23 +6,35 @@
     android:layout_marginTop="6dp"
     android:layout_height="wrap_content">
 
-    <CheckBox
-        android:id="@+id/fragment_active_chore_completed"
+    <LinearLayout
         android:layout_gravity="start"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:textColor="@color/textColor"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/fragment_active_chore_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="4dp"
-        android:gravity="center"
-        android:textColor="@color/textColor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/fragment_active_chore_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textColor"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/fragment_active_chore_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textColor"
+            android:textSize="20sp"/>
+
+    </LinearLayout>
+
+    <ImageView
         android:layout_gravity="end"
-        android:textSize="18sp"/>
+        android:id="@+id/fragment_active_chore_finish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:src="?attr/actionCompleteIcon" />
 
 </FrameLayout>

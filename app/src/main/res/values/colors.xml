@@ -10,7 +10,9 @@
     <color name="dark_red">#FFA00000</color>
     <color name="light_blue">#FF6060FF</color>
     <color name="dark_blue">#FF1010F0</color>
+    <color name="teal">#FF00AFCF</color>
 
+    <color name="actionBarColor">@color/teal</color>
     <color name="backgroundColor">@color/white_tint</color>
     <color name="accentColor">@color/white</color>
     <color name="textColor">@color/black</color>

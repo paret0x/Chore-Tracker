@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="ChoreTrackerTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="colorPrimaryDark">@color/actionBarColor</item>
 
-        <item name="actionCalendarIcon">@drawable/icon_calendar</item>
-        <item name="actionCheckedIcon">@drawable/icon_checked</item>
+        <item name="actionRoomsIcon">@drawable/icon_room</item>
         <item name="actionTasksIcon">@drawable/icon_tasks</item>
-        <item name="actionDeleteIcon">@drawable/icon_delete</item>
         <item name="actionAddIcon">@drawable/icon_add</item>
         <item name="actionEditIcon">@drawable/icon_edit</item>
+        <item name="actionCompleteIcon">@drawable/icon_check</item>
+        <item name="actionSettingsIcon">@drawable/icon_settings</item>
+        <item name="actionReturnIcon">@drawable/icon_return</item>
     </style>
 </resources>
