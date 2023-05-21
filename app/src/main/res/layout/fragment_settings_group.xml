@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_settings_roomgroup_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/headerBackgroundColor"
+        android:padding="8dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/fragment_settings_roomgroup_text"
+            android:layout_gravity="start"
+            android:textSize="18sp"
+            android:textColor="@color/headerTextColor"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/fragment_settings_roomgroup_edit"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="end"
+            android:gravity="center_vertical"
+            android:src="?attr/actionEditIcon" />
+
+    </FrameLayout>
+
+    <View style="@style/Divider"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fragment_settings_roomgroup_item_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

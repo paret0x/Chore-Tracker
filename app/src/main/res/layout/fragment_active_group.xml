@@ -4,28 +4,29 @@
     android:id="@+id/fragment_active_group_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:paddingBottom="4dp"
-    android:paddingStart="2dp"
-    android:paddingEnd="8dp"
-    android:background="@drawable/container_corners"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/fragment_active_group_text"
-        android:textSize="18sp"
-        android:paddingTop="4dp"
-        android:textStyle="bold"
-        android:paddingStart="8dp"
-        android:paddingEnd="0dp"
-        android:textColor="@color/textColor"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@color/headerBackgroundColor">
+
+        <TextView
+            android:id="@+id/fragment_active_group_text"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:padding="12dp"
+            android:textColor="@color/headerTextColor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <View style="@style/Divider"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fragment_active_group_item_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"/>
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

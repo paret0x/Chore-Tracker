@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:paddingTop="6dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/fragment_editchore_name_text"
+            android:textSize="18sp"
+            android:text="Chore Name"
+            android:padding="8dp"
+            android:textColor="@color/headerTextColor"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/fragment_editchore_name_edit"
+            android:maxLines="1"
+            android:lines="1"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:inputType="text"
+            android:textColor="@color/itemTextColor"
+            android:padding="8dp"
+            android:textSize="16sp"
+            android:hint="Name"
+            android:textColorHint="@color/gray"
+            android:importantForAutofill="no"/>
+
+        <View style="@style/Divider"/>
+
+        <FrameLayout
+            android:padding="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/fragment_editchore_room_text"
+                android:layout_gravity="start|center_vertical"
+                android:textSize="16sp"
+                android:textColor="@color/headerTextColor"
+                android:text="Room"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <Spinner
+                android:id="@+id/fragment_editchore_room_dropdown"
+                android:layout_gravity="end|center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"/>
+
+        </FrameLayout>
+
+        <View style="@style/Divider"/>
+
+        <FrameLayout
+            android:padding="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/fragment_editchore_freq_text"
+                android:layout_gravity="start|center_vertical"
+                android:textSize="16sp"
+                android:textColor="@color/headerTextColor"
+                android:text="Frequency"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp">
+
+                <NumberPicker
+                    android:id="@+id/fragment_editchore_freq_months"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="m"/>
+
+                <NumberPicker
+                    android:id="@+id/fragment_editchore_freq_weeks"
+                    android:layout_marginStart="6dp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="w"/>
+
+                <NumberPicker
+                    android:id="@+id/fragment_editchore_freq_days"
+                    android:layout_marginStart="6dp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="d"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <View style="@style/Divider"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:weightSum="1.0"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/fragment_editchore_save"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="0.5"
+            android:textSize="20sp"
+            android:text="Save"
+            android:drawableStart="?attr/actionSaveIcon"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:id="@+id/fragment_editchore_delete"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="0.5"
+            android:textSize="20sp"
+            android:text="Delete"
+            android:drawableStart="?attr/actionDeleteIcon"
+            style="?android:attr/buttonBarButtonStyle"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

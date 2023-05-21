@@ -1,28 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/fragment_active_chore_container"
     android:layout_width="match_parent"
-    android:layout_marginTop="6dp"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <CheckBox
-        android:id="@+id/fragment_active_chore_completed"
-        android:layout_gravity="start"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:textColor="@color/textColor"
-        android:textSize="20sp" />
+    <FrameLayout
+        android:id="@+id/fragment_active_chore_container"
+        android:layout_width="match_parent"
+        android:background="@color/itemBackgroundColor"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/fragment_active_chore_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="4dp"
-        android:gravity="center"
-        android:textColor="@color/textColor"
-        android:layout_gravity="end"
-        android:textSize="18sp"/>
+        <LinearLayout
+            android:layout_gravity="start"
+            android:layout_width="match_parent"
+            android:padding="12dp"
+            android:layout_height="wrap_content">
 
-</FrameLayout>
+            <TextView
+                android:id="@+id/fragment_active_chore_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/itemTextColor"
+                android:layout_marginStart="6dp"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/fragment_active_chore_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/itemTextColor"
+                android:layout_marginStart="8dp"
+                android:textSize="20sp"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_gravity="end"
+            android:id="@+id/fragment_active_chore_finish"
+            android:padding="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:src="?attr/actionCompleteIcon" />
+
+    </FrameLayout>
+
+    <View style="@style/Divider"/>
+
+</LinearLayout>
