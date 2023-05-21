@@ -1,28 +1,48 @@
 package com.paret0x.choretracker;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
-public class MainActivity extends FragmentActivity {
+interface FragmentChanger {
+    void openTasks();
+    void openSettings();
+    void openEditRoom(HomeRoom existingRoom);
+    void openEditChore(Chore existingChore);
+}
+
+public class MainActivity extends FragmentActivity implements FragmentChanger{
     private ImageView actionButton;
     private TextView fragmentTitle;
+    private Fragment activeFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ChoreDatabase.initDatabase(this);
+        Utilities.getInstance().populateUtilities();
+
         fragmentTitle = findViewById(R.id.nav_title);
         actionButton = findViewById(R.id.nav_settings);
 
-        Utilities.getInstance().populateUtilities(this);
+        openTasks();
+    }
 
-        closeSettings();
+    public void openTasks() {
+        String title = "Current Chores";
+        fragmentTitle.setText(title);
+
+        actionButton.setImageResource(R.drawable.icon_settings);
+        actionButton.setOnClickListener(view -> openSettings());
+
+        TasksFragment newFragment = new TasksFragment();
+        activeFragment = newFragment;
+        getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, newFragment).commit();
     }
 
     public void openSettings() {
@@ -30,20 +50,46 @@ public class MainActivity extends FragmentActivity {
         fragmentTitle.setText(title);
 
         actionButton.setImageResource(R.drawable.icon_return);
-        actionButton.setOnClickListener(view -> closeSettings());
+        actionButton.setOnClickListener(view -> openTasks());
 
-        Fragment newFragment = new SettingsFragment();
+        SettingsFragment newFragment = new SettingsFragment();
+        activeFragment = newFragment;
         getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, newFragment).commit();
     }
 
-    public void closeSettings() {
-        String title = "Current Chores";
+    public void openEditRoom(HomeRoom existingRoom) {
+        String title = "";
+        if (existingRoom == null) {
+            title = "Add Room";
+        } else {
+            title = "Edit Room";
+        }
         fragmentTitle.setText(title);
 
-        actionButton.setImageResource(R.drawable.icon_settings);
+        actionButton.setImageResource(R.drawable.icon_return);
         actionButton.setOnClickListener(view -> openSettings());
 
-        Fragment newFragment = new TasksFragment();
+        EditRoomFragment newFragment = new EditRoomFragment();
+        newFragment.setExistingRoom(existingRoom);
+        activeFragment = newFragment;
+        getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, newFragment).commit();
+    }
+
+    public void openEditChore(Chore existingChore) {
+        String title = "";
+        if (existingChore == null) {
+            title = "Add Chore";
+        } else {
+            title = "Edit Chore";
+        }
+        fragmentTitle.setText(title);
+
+        actionButton.setImageResource(R.drawable.icon_return);
+        actionButton.setOnClickListener(view -> openSettings());
+
+        EditChoreFragment newFragment = new EditChoreFragment();
+        newFragment.setExistingChore(existingChore);
+        activeFragment = newFragment;
         getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, newFragment).commit();
     }
 }

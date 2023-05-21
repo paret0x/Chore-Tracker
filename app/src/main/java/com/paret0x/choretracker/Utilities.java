@@ -1,17 +1,11 @@
 package com.paret0x.choretracker;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,17 +20,20 @@ enum ChoreStatus {
 }
 
 class TimeDiff {
+    public int months = 0;
     public int weeks = 0;
     public int days = 0;
-    public int hours = 0;
 }
 
 public class Utilities {
     private static Utilities instance;
+    public boolean hasDatabaseLoaded = false;
     private final ArrayList<Chore> chores = new ArrayList<>();
     private final ArrayList<HomeRoom> rooms = new ArrayList<>();
     private final HashMap<ChoreStatus, ArrayList<Chore>> choresByStatus = new HashMap<>();
-    private final ExecutorService executorService = Executors.newFixedThreadPool(2);
+    private final HashMap<Integer, ArrayList<Chore>> choresByRoom = new HashMap<>();
+    private final ExecutorService executorService = Executors.newFixedThreadPool(1);
+    public final long milliToDays = 1000 * 60 * 60 * 24;
 
     public static synchronized Utilities getInstance() {
         if (instance == null) {
@@ -45,42 +42,26 @@ public class Utilities {
         return instance;
     }
 
-    public synchronized void populateUtilities(final Context context) {
-        Log.i(this.getClass().getSimpleName(), "Initializing database");
+    public synchronized void populateUtilities() {
+        Log.i(this.getClass().getSimpleName(), "Populating utilities");
         chores.clear();
         rooms.clear();
-        ChoreDatabase.initDatabase(context);
-        executorService.submit(() -> rooms.addAll(ChoreDatabase.getDatabase().choreDao().getRooms()));
-        executorService.submit(() -> chores.addAll(ChoreDatabase.getDatabase().choreDao().getChores()));
+        executorService.submit(() -> {
+            Log.i(this.getClass().getSimpleName(), "Reading from database");
+            chores.addAll(ChoreDatabase.getDatabase().choreDao().getChores());
+            rooms.addAll(ChoreDatabase.getDatabase().choreDao().getRooms());
+            hasDatabaseLoaded = true;
+            Log.i(this.getClass().getSimpleName(), "Done reading from database");
+        });
     }
 
-    public int getNumChores() {
-        return chores.size();
-    }
-
-    public int getNumRooms() {
-        return rooms.size();
-    }
-
-    public ArrayList<Chore> getChores() {
-        return chores;
-    }
-
-    public ArrayList<HomeRoom> getRooms() {
-        return rooms;
-    }
-
-    public Chore getChoreAt(int index) {
-        return chores.get(index);
-    }
-
-    public HomeRoom getRoomAt(int index) {
-        return rooms.get(index);
-    }
-
-    public void addChore(final String choreName) {
+    /* ===== Database ===== */
+    public void addChore(Chore c) {
         final int choreId = (chores.size() > 0) ? (chores.get(chores.size() - 1).choreId + 1) : 1;
-        Chore c = new Chore(choreId, choreName, -1,"", "", "");
+        long dateLastDone = Calendar.getInstance().getTime().getTime() / milliToDays;
+        c.choreId = choreId;
+        c.dateLastDone = dateLastDone;
+        Log.i(this.getClass().getSimpleName(), c.choreName + ": Time chore last done: " + dateLastDone);
         chores.add(c);
         executorService.submit(() -> ChoreDatabase.getDatabase().choreDao().insertChore(c));
     }
@@ -114,10 +95,7 @@ public class Utilities {
         executorService.submit(() -> ChoreDatabase.getDatabase().choreDao().deleteRoom(r));
     }
 
-    public int getRoomIndex(HomeRoom room) {
-        return rooms.indexOf(room);
-    }
-
+    /* ===== ChoreStatus ===== */
     public ChoreStatus getChoreStatus(int choreId) {
         ChoreStatus status = ChoreStatus.INACTIVE;
 
@@ -133,14 +111,22 @@ public class Utilities {
     }
 
     public ChoreStatus determineChoreStatus(@NonNull Chore c) {
-        ChoreStatus status = ChoreStatus.INACTIVE;
+        ChoreStatus status;
 
-        TimeDiff diff = getTimeDiff(c);
-        if (diff == null) {
-            return status;
+        TimeDiff choreDiff = getTimeDiffForChore(c);
+        TimeDiff frequency = getTimeDiff(c.frequency);
+
+        long daysSinceDone = (choreDiff.months * 30L) + (choreDiff.weeks * 7L) + choreDiff.days;
+        long daysInFrequency = (frequency.months * 30L) + (frequency.weeks * 7L) + frequency.days;
+
+        if (daysSinceDone < daysInFrequency) {
+            status = ChoreStatus.COMPLETED;
+        } else if (daysSinceDone < (daysInFrequency * 2L)) {
+            status = ChoreStatus.ONGOING;
+        } else {
+            status = ChoreStatus.OVERDUE;
         }
 
-        status = ChoreStatus.ONGOING;
         return status;
     }
 
@@ -193,109 +179,79 @@ public class Utilities {
         return index;
     }
 
-    @SuppressLint("SimpleDateFormat")
-    public TimeDiff getTimeDiff(Chore c) {
-        TimeDiff diff = new TimeDiff();
+    public ArrayList<Chore> getChoresByStatus(ChoreStatus status) {
+        return choresByStatus.get(status);
+    }
 
-        Date choreOpenedDate;
-        try {
-            choreOpenedDate = new SimpleDateFormat().parse(c.dateLastDone);
-        } catch (ParseException e) {
-            return null;
+    /* ===== HomeRoom ===== */
+    public int getNumRooms() {
+        return rooms.size();
+    }
+
+    public HomeRoom getRoomAt(int index) {
+        return rooms.get(index);
+    }
+
+    public void updateChoresByRoom() {
+        // Reset values
+        for (HomeRoom r : rooms) {
+            if (choresByRoom.containsKey(r.roomId)) {
+                Objects.requireNonNull(choresByRoom.get(r.roomId)).clear();
+            } else {
+                choresByRoom.put(r.roomId, new ArrayList<>());
+            }
         }
 
-        Date currentDate = Calendar.getInstance().getTime();
-        long difference = currentDate.getTime() - Objects.requireNonNull(choreOpenedDate).getTime();
+        // Update all chores
+        for (Chore c : chores) {
+            Objects.requireNonNull(choresByRoom.get(c.roomId)).add(c);
+        }
+    }
 
-        long hoursInMilli = 1000 * 60 * 60;
-        long daysInMilli = hoursInMilli * 24;
-        long weeksInMilli = daysInMilli * 7;
+    public ArrayList<Chore> getChoresByRoom(int roomId) {
+        return Objects.requireNonNull(choresByRoom.get(roomId));
+    }
 
-        diff.weeks = (int)(difference / weeksInMilli);
-        difference %= weeksInMilli;
-        diff.days = (int)(difference / daysInMilli);
-        difference %= daysInMilli;
-        diff.hours = (int)(difference / hoursInMilli);
+    public ArrayList<String> getRoomNames() {
+        ArrayList<String> roomNames = new ArrayList<>();
+
+        for (HomeRoom r : rooms) {
+            roomNames.add(r.roomName);
+        }
+
+        return roomNames;
+    }
+
+    public int getRoomIdByName(String roomName) {
+        Optional<HomeRoom> foundRoom = rooms.stream().filter(room -> Objects.equals(room.roomName, roomName)).findAny();
+        return foundRoom.map(homeRoom -> homeRoom.roomId).orElse(-1);
+    }
+
+    public String getRoomNameById(int roomId) {
+        Optional<HomeRoom> foundRoom = rooms.stream().filter(room -> room.roomId == roomId).findAny();
+        return foundRoom.map(homeRoom -> homeRoom.roomName).orElse(null);
+    }
+
+    /* ===== TimeDiff ===== */
+    public TimeDiff getTimeDiffForChore(Chore c) {
+        long currentTime = Calendar.getInstance().getTime().getTime() / milliToDays;
+        long difference = currentTime - c.dateLastDone;
+
+        return getTimeDiff(difference);
+    }
+
+    public TimeDiff getTimeDiff(long duration) {
+        TimeDiff diff = new TimeDiff();
+
+        long daysInWeek = 7;
+        long daysInMonth = 30;
+
+        diff.months = (int)(duration / daysInMonth);
+        duration %= daysInMonth;
+        diff.weeks = (int)(duration / daysInWeek);
+        duration %= daysInWeek;
+        diff.days = (int)duration;
 
         return diff;
     }
-
-    /*
-    public Chore getChoreById(int choreId) {
-        Optional<Chore> foundChore = chores.stream().filter(chore -> chore.choreId == choreId).findAny();
-        return foundChore.orElse(null);
-    }
-
-    public int getChoreIndex(int choreId) {
-        Optional<Chore> foundChore = chores.stream().filter(chore -> chore.choreId == choreId).findAny();
-        return foundChore.map(chores::indexOf).orElse(-1);
-    }
-
-    public void populateChoreHolder() {
-        for (ChoreType type : ChoreType.values()) {
-            if (ChoreHolder.getInstance().choreLists.containsKey(type)) {
-                Objects.requireNonNull(ChoreHolder.getInstance().choreLists.get(type)).clear();
-            } else {
-                ChoreHolder.getInstance().choreLists.put(type, new ArrayList<>());
-            }
-        }
-
-        for (Chore c : chores) {
-            ChoreType type = getTypeOfChore(c);
-            Objects.requireNonNull(ChoreHolder.getInstance().choreLists.get(type)).add(c);
-        }
-    }
-
-    public void populateOngoingHolder() {
-        OngoingHolder.getInstance().ongoingList.clear();
-        OngoingHolder.getInstance().inactiveList.clear();
-
-        for (Chore c : chores) {
-            ChoreType type = getTypeOfChore(c);
-
-            if ((type == ChoreType.ONGOING) || (type == ChoreType.OVERDUE)) {
-                OngoingHolder.getInstance().ongoingList.add(c);
-            } else {
-                OngoingHolder.getInstance().inactiveList.add(c);
-            }
-        }
-    }
-
-    public ChoreType getChoreHolderType(int choreId) {
-        ChoreType type = ChoreType.INACTIVE;
-
-        for (ChoreType cType : ChoreType.values()) {
-            Optional<Chore> foundChore = Objects.requireNonNull(ChoreHolder.getInstance().choreLists.get(cType)).stream().filter(chore -> chore.choreId == choreId).findAny();
-            if (foundChore.isPresent()) {
-                return cType;
-            }
-        }
-
-        return type;
-    }
-
-    public int getChoreHolderIndex(int choreId) {
-        int index = -1;
-
-        for (ChoreType cType : ChoreType.values()) {
-            Optional<Chore> foundChore = Objects.requireNonNull(ChoreHolder.getInstance().choreLists.get(cType)).stream().filter(chore -> chore.choreId == choreId).findAny();
-            if (foundChore.isPresent()) {
-                return Objects.requireNonNull(ChoreHolder.getInstance().choreLists.get(cType)).indexOf(foundChore.get());
-            }
-        }
-
-        return index;
-    }
-
-    public int getOngoingHolderIndex(int choreId) {
-        Optional<Chore> foundChore;
-        foundChore = OngoingHolder.getInstance().ongoingList.stream().filter(chore -> chore.choreId == choreId).findFirst();
-        if (foundChore.isPresent()) {
-            return OngoingHolder.getInstance().ongoingList.indexOf(foundChore.get());
-        }
-
-        foundChore = OngoingHolder.getInstance().inactiveList.stream().filter(chore -> chore.choreId == choreId).findFirst();
-        return foundChore.map(chore -> OngoingHolder.getInstance().inactiveList.indexOf(chore)).orElse(-1);
-    }
-    */
 }

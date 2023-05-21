@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="light_gray">#FFA0A0A0</color>
-    <color name="gray">#FF606060</color>
-    <color name="dark_gray">#FF202020</color>
-    <color name="white_tint">#FFF0F4FF</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="light_red">#FFD03030</color>
-    <color name="dark_red">#FFA00000</color>
-    <color name="light_blue">#FF6060FF</color>
-    <color name="dark_blue">#FF1010F0</color>
+    <color name="mine_shaft">#282828</color>
+    <color name="jaguar">#26262D</color>
+    <color name="ship_cove">#5BB6E0</color>
+    <color name="shark">#202028</color>
+    <color name="tuna">#404048</color>
+    <color name="white">#FFFFFF</color>
+    <color name="gray">#606060</color>
+    <color name="scarlet">#FF2B08</color>
 
-    <color name="actionBarColor">@color/gray</color>
-    <color name="backgroundColor">@color/black</color>
-    <color name="accentColor">@color/dark_gray</color>
-    <color name="textColor">@color/white</color>
-    <color name="grayTextColor">@color/light_gray</color>
-    <color name="blueTextColor">@color/light_blue</color>
-    <color name="redTextColor">@color/light_red</color>
-    <color name="checkboxColor">@color/white</color>
+    <color name="actionBarBackgroundColor">@color/mine_shaft</color>
+    <color name="actionBarTextColor">@color/white</color>
+    <color name="headerBackgroundColor">@color/jaguar</color>
+    <color name="headerTextColor">@color/ship_cove</color>
+    <color name="itemBackgroundColor">@color/shark</color>
+    <color name="itemTextColor">@color/white</color>
+    <color name="backgroundColor">@color/shark</color>
+    <color name="dividerColor">@color/tuna</color>
+    <color name="redTextColor">@color/scarlet</color>
 </resources>

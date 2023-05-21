@@ -11,5 +11,6 @@
         <attr name="actionCompleteIcon" format="reference" />
         <attr name="actionSettingsIcon" format="reference" />
         <attr name="actionReturnIcon" format="reference" />
+        <attr name="actionSaveIcon" format="reference" />
     </declare-styleable>
 </resources>

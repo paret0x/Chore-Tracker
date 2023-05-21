@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:paddingTop="6dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/fragment_editroom_name_action"
+            android:textColor="@color/headerTextColor"
+            android:textSize="18sp"
+            android:padding="8dp"
+            android:text="Room Name"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/fragment_editroom_name_edit"
+            android:maxLines="1"
+            android:lines="1"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:inputType="text"
+            android:textColor="@color/itemTextColor"
+            android:padding="8dp"
+            android:textSize="16sp"
+            android:hint="Name"
+            android:textColorHint="@color/gray"
+            android:importantForAutofill="no" />
+
+        <View style="@style/Divider"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:weightSum="1.0"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/fragment_editroom_save"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="0.5"
+            android:textSize="20sp"
+            android:text="Save"
+            android:drawableStart="?attr/actionSaveIcon"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:id="@+id/fragment_editroom_delete"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="0.5"
+            android:textSize="20sp"
+            android:text="Delete"
+            android:drawableStart="?attr/actionDeleteIcon"
+            style="?android:attr/buttonBarButtonStyle"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

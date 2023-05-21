@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:background="@color/itemBackgroundColor">
+
+        <TextView
+            android:id="@+id/fragment_settings_chore_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:paddingStart="6dp"
+            android:paddingEnd="6dp"
+            android:layout_gravity="start|center_vertical"
+            android:textColor="@color/itemTextColor" />
+
+        <ImageView
+            android:layout_gravity="end|center_vertical"
+            android:id="@+id/fragment_settings_chore_edit"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="?attr/actionEditIcon" />
+
+    </FrameLayout>
+
+    <View style="@style/Divider"/>
+
+</LinearLayout>
+

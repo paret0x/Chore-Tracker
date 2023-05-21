@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="light_gray">#FFA0A0A0</color>
-    <color name="gray">#FF606060</color>
-    <color name="dark_gray">#FF202020</color>
-    <color name="white_tint">#FFF0F4FF</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="light_red">#FFD03030</color>
-    <color name="dark_red">#FFA00000</color>
-    <color name="light_blue">#FF6060FF</color>
-    <color name="dark_blue">#FF1010F0</color>
-    <color name="teal">#FF00AFCF</color>
+    <color name="rich_blue">#5B5BB0</color>
+    <color name="ghost_white">#FDFDFF</color>
+    <color name="concrete">#F2F2F2</color>
+    <color name="white">#FFFFFF</color>
+    <color name="outer_space">#2D363D</color>
+    <color name="alto">#D8D8D8</color>
+    <color name="gray">#606060</color>
+    <color name="cinnabar">#E64B3F</color>
 
-    <color name="actionBarColor">@color/teal</color>
-    <color name="backgroundColor">@color/white_tint</color>
-    <color name="accentColor">@color/white</color>
-    <color name="textColor">@color/black</color>
-    <color name="grayTextColor">@color/gray</color>
-    <color name="blueTextColor">@color/light_blue</color>
-    <color name="redTextColor">@color/light_red</color>
-    <color name="checkboxColor">@color/black</color>
+    <color name="actionBarBackgroundColor">@color/rich_blue</color>
+    <color name="actionBarTextColor">@color/ghost_white</color>
+    <color name="headerBackgroundColor">@color/concrete</color>
+    <color name="headerTextColor">@color/rich_blue</color>
+    <color name="itemBackgroundColor">@color/white</color>
+    <color name="itemTextColor">@color/outer_space</color>
+    <color name="backgroundColor">@color/white</color>
+    <color name="dividerColor">@color/alto</color>
+    <color name="redTextColor">@color/cinnabar</color>
 </resources>

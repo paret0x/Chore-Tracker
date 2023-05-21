@@ -10,7 +10,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/actionBarColor"
+        android:background="@color/actionBarBackgroundColor"
         android:padding="4dp"
         android:paddingBottom="8dp">
 
@@ -18,12 +18,12 @@
             android:id="@+id/nav_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
+            android:textColor="@color/actionBarTextColor"
             android:textStyle="bold"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="6dp"
             android:layout_gravity="start"
             android:paddingBottom="4dp"
-            android:textSize="24sp" />
+            android:textSize="32sp" />
 
         <ImageView
             android:id="@+id/nav_settings"
@@ -35,6 +35,8 @@
             android:src="?attr/actionSettingsIcon" />
 
     </FrameLayout>
+
+    <View style="@style/Divider"/>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment_activity_main"

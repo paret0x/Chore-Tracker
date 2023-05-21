@@ -3,7 +3,6 @@ package com.paret0x.choretracker;
 import android.content.Context;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Dao;
 import androidx.room.Database;
@@ -15,11 +14,8 @@ import androidx.room.Query;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.Update;
-import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Entity(tableName = "chore_table")
 class Chore {
@@ -34,21 +30,17 @@ class Chore {
     int roomId;
 
     @ColumnInfo(name = "frequency")
-    String frequency;
+    long frequency; // in days
 
     @ColumnInfo(name = "last_done")
-    String dateLastDone;
+    long dateLastDone; // seconds since epoch
 
-    @ColumnInfo(name = "room")
-    String roomName;
-
-    public Chore(int choreId, String choreName, int roomId, String frequency, String dateLastDone, String roomName) {
+    public Chore(int choreId, String choreName, int roomId, long frequency, long dateLastDone) {
         this.choreId = choreId;
         this.choreName = choreName;
         this.roomId = roomId;
         this.frequency = frequency;
         this.dateLastDone = dateLastDone;
-        this.roomName = roomName;
     }
 }
 
@@ -93,29 +85,17 @@ abstract class ChoreDatabase extends RoomDatabase {
     public abstract ChoreDao choreDao();
 
     private static volatile ChoreDatabase instance;
-    private static final ExecutorService executorService = Executors.newFixedThreadPool(2);
 
     static synchronized void initDatabase(final Context context) {
-        if (instance == null) {
-            Log.i("ChoreDatabase", "Building database");
-            instance = Room.databaseBuilder(context.getApplicationContext(), ChoreDatabase.class, "choreList_db").addCallback(roomBuildCallback).build();
+        if (instance != null) {
+            instance.close();
         }
+
+        Log.i("ChoreDatabase", "Building database");
+        instance = Room.databaseBuilder(context.getApplicationContext(), ChoreDatabase.class, "choreList_db").build();
     }
 
     static synchronized ChoreDatabase getDatabase() {
         return instance;
     }
-
-    private static final RoomDatabase.Callback roomBuildCallback = new RoomDatabase.Callback() {
-        @Override
-        public void onCreate(@NonNull SupportSQLiteDatabase db) {
-            super.onCreate(db);
-
-            executorService.submit(() -> {
-                List<Chore> choreList = instance.choreDao().getChores();
-                List<HomeRoom> roomList = instance.choreDao().getRooms();
-                Log.i("ChoreDatabase", "Finished reading database. Found " + choreList.size() + " chores and " + roomList.size() + " rooms");
-            });
-        }
-    };
 }

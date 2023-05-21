@@ -1,10 +1,10 @@
 package com.paret0x.choretracker;
 
-import android.annotation.SuppressLint;
-import android.app.Dialog;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +18,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 class TasksFragmentListViewHolder extends RecyclerView.ViewHolder {
     public TextView choreNameView;
@@ -38,21 +39,20 @@ class TasksFragmentListViewHolder extends RecyclerView.ViewHolder {
 }
 
 class TasksFragmentListViewAdapter extends RecyclerView.Adapter<TasksFragmentListViewHolder> {
-    private int choreNameColor;
-    private int choreDateColor;
+    private final int choreNameColor;
+    private final int choreDateColor;
     private final ChoreStatus status;
 
     public TasksFragmentListViewAdapter(ChoreStatus status) {
         this.status = status;
 
-        if (status == ChoreStatus.OVERDUE) {
-            choreNameColor = R.color.textColor;
+        choreNameColor = R.color.itemTextColor;
+
+        if (status == ChoreStatus.ONGOING) {
+            choreDateColor = R.color.headerTextColor;
+        } else if (status == ChoreStatus.OVERDUE) {
             choreDateColor = R.color.redTextColor;
-        } else if (status == ChoreStatus.ONGOING) {
-            choreNameColor = R.color.textColor;
-            choreDateColor = R.color.blueTextColor;
-        } else if (status == ChoreStatus.COMPLETED) {
-            choreNameColor = R.color.grayTextColor;
+        } else {
             choreDateColor = R.color.gray;
         }
     }
@@ -69,23 +69,34 @@ class TasksFragmentListViewAdapter extends RecyclerView.Adapter<TasksFragmentLis
         Chore c = Utilities.getInstance().getChoreByStatusIndex(this.status, position);
         String choreName = c.choreName;
 
-        String choreDateText = "";
-        TimeDiff diff = Utilities.getInstance().getTimeDiff(c);
+        TimeDiff diff = Utilities.getInstance().getTimeDiffForChore(c);
         if (diff == null) {
             return;
         }
 
+        String choreDateText = "";
+        if (diff.months > 0) {
+            choreDateText = diff.months + "m ";
+        }
+
         if (diff.weeks > 0) {
-            choreDateText = diff.weeks + "w";
-        } else if (diff.days > 0) {
-            choreDateText = diff.days + "d";
-        } else {
-            choreDateText = diff.hours + "h";
+            choreDateText += diff.weeks + "w ";
+        }
+
+        if (diff.days > 0) {
+            choreDateText += diff.days + "d";
+        }
+
+        if ((diff.months == 0) && (diff.weeks == 0) && (diff.days == 0)) {
+            choreDateText = "0d";
         }
 
         holder.choreNameView.setText(choreName);
         holder.choreNameView.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), choreNameColor));
-        holder.choreCompleteView.setOnClickListener(new TasksFragment.TasksFragmentConfirmClickListener(c));
+        holder.choreCompleteView.setOnClickListener(view -> {
+            TasksFragment.TasksFragmentConfirmDialog dialog = new TasksFragment.TasksFragmentConfirmDialog(holder.choreNameView.getContext(), c);
+            dialog.show();
+        });
         holder.choreTimeView.setText(choreDateText);
         holder.choreTimeView.setTextColor(ContextCompat.getColor(holder.choreTimeView.getContext(), choreDateColor));
     }
@@ -100,16 +111,20 @@ public class TasksFragment extends Fragment {
     protected static RecyclerView overdueView;
     protected static RecyclerView activeView;
     protected static RecyclerView completedView;
+    public boolean wasDatabaseReadyOnLoad;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        Utilities.getInstance().updateChoreStatuses();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_active, container, false);
+
+        wasDatabaseReadyOnLoad = Utilities.getInstance().hasDatabaseLoaded;
+        Log.e(this.getClass().getSimpleName(), "Has database loaded at time of create view? " + wasDatabaseReadyOnLoad);
+        Utilities.getInstance().updateChoreStatuses();
 
         LinearLayout overdueParent = view.findViewById(R.id.fragment_active_overdue);
         ((TextView)overdueParent.findViewById(R.id.fragment_active_group_text)).setText("OVERDUE");
@@ -118,63 +133,84 @@ public class TasksFragment extends Fragment {
         overdueView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
         LinearLayout activeParent = view.findViewById(R.id.fragment_active_ongoing);
-        ((TextView)activeParent.findViewById(R.id.fragment_active_group_text)).setText("ONGOING");
+        ((TextView)activeParent.findViewById(R.id.fragment_active_group_text)).setText("TO DO");
         activeView = activeParent.findViewById(R.id.fragment_active_group_item_view);
         activeView.setAdapter(new TasksFragmentListViewAdapter(ChoreStatus.ONGOING));
         activeView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
         LinearLayout completedParent = view.findViewById(R.id.fragment_active_completed);
-        ((TextView)completedParent.findViewById(R.id.fragment_active_group_text)).setText("COMPLETED");
+        ((TextView)completedParent.findViewById(R.id.fragment_active_group_text)).setText("DONE");
         completedView = completedParent.findViewById(R.id.fragment_active_group_item_view);
         completedView.setAdapter(new TasksFragmentListViewAdapter(ChoreStatus.COMPLETED));
         completedView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
+        if (!wasDatabaseReadyOnLoad) {
+            reloadViews();
+        }
         return view;
     }
 
-    public static class TasksFragmentConfirmClickListener implements View.OnClickListener {
-        private final Chore chore;
+    public void reloadViews() {
+        Log.i(this.getClass().getSimpleName(), "Scheduling reload");
+        Handler handler = new Handler();
+        handler.postDelayed(() -> requireActivity().runOnUiThread(() -> {
+            Log.i(this.getClass().getSimpleName(), "Reloading views");
+            Utilities.getInstance().updateChoreStatuses();
+            ArrayList<Chore> overdueChores = Utilities.getInstance().getChoresByStatus(ChoreStatus.OVERDUE);
+            ArrayList<Chore> activeChores = Utilities.getInstance().getChoresByStatus(ChoreStatus.ONGOING);
+            ArrayList<Chore> completedChores = Utilities.getInstance().getChoresByStatus(ChoreStatus.COMPLETED);
 
-        public TasksFragmentConfirmClickListener(Chore c) {
-            this.chore = c;
-        }
-
-        @Override
-        public void onClick(View view) {
-            TasksFragmentConfirmDialog dialog = new TasksFragmentConfirmDialog(overdueView.getContext(), this.chore);
-            dialog.show();
-        }
-    }
-
-    protected static class TasksFragmentConfirmDialog extends Dialog implements android.view.View.OnClickListener {
-        private final Chore chore;
-
-        public TasksFragmentConfirmDialog(@NonNull Context context, Chore c) {
-            super(context);
-            this.chore = c;
-        }
-
-        @Override
-        @SuppressLint("SimpleDateFormat")
-        public void onClick(View view) {
-            SimpleDateFormat formatter = new SimpleDateFormat();
-            Date currentDate = Calendar.getInstance().getTime();
-            this.chore.dateLastDone = formatter.format(currentDate);
-
-            ChoreStatus status = Utilities.getInstance().getChoreStatus(this.chore.choreId);
-            int oldIndex = Utilities.getInstance().getChoreStatusIndex(this.chore.choreId);
-            Utilities.getInstance().moveChoreByStatus(this.chore, status, ChoreStatus.COMPLETED);
-            int newIndex = Utilities.getInstance().getChoreStatusIndex(this.chore.choreId);
-
-            if (status == ChoreStatus.COMPLETED) {
-                Objects.requireNonNull(completedView.getAdapter()).notifyItemRemoved(oldIndex);
-            } else if (status == ChoreStatus.ONGOING) {
-                Objects.requireNonNull(activeView.getAdapter()).notifyItemRemoved(oldIndex);
-            } else if (status == ChoreStatus.OVERDUE) {
-                Objects.requireNonNull(overdueView.getAdapter()).notifyItemRemoved(oldIndex);
+            for (int i = 0; i < overdueChores.size(); i++) {
+                Objects.requireNonNull(overdueView.getAdapter()).notifyItemInserted(i);
             }
 
-            Objects.requireNonNull(completedView.getAdapter()).notifyItemInserted(newIndex);
+            for (int i = 0; i < activeChores.size(); i++) {
+                Objects.requireNonNull(activeView.getAdapter()).notifyItemInserted(i);
+            }
+
+            for (int i = 0; i < completedChores.size(); i++) {
+                Objects.requireNonNull(completedView.getAdapter()).notifyItemInserted(i);
+            }
+        }), 200L);
+    }
+
+    protected static class TasksFragmentConfirmDialog {
+        private final Chore chore;
+        private final Context context;
+
+        public TasksFragmentConfirmDialog(Context context, Chore c) {
+            this.chore = c;
+            this.context = context;
+        }
+
+        public void show() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Has the task \"" + chore.choreName + "\" been completed?");
+
+            builder.setPositiveButton("YES", (dialogInterface, i) -> {
+                this.chore.dateLastDone = (Calendar.getInstance().getTime().getTime() / Utilities.getInstance().milliToDays);
+
+                ChoreStatus status = Utilities.getInstance().getChoreStatus(this.chore.choreId);
+                int oldIndex = Utilities.getInstance().getChoreStatusIndex(this.chore.choreId);
+                Utilities.getInstance().moveChoreByStatus(this.chore, status, ChoreStatus.COMPLETED);
+                int newIndex = Utilities.getInstance().getChoreStatusIndex(this.chore.choreId);
+
+                if (status == ChoreStatus.COMPLETED) {
+                    Objects.requireNonNull(completedView.getAdapter()).notifyItemRemoved(oldIndex);
+                } else if (status == ChoreStatus.ONGOING) {
+                    Objects.requireNonNull(activeView.getAdapter()).notifyItemRemoved(oldIndex);
+                } else if (status == ChoreStatus.OVERDUE) {
+                    Objects.requireNonNull(overdueView.getAdapter()).notifyItemRemoved(oldIndex);
+                }
+
+                Objects.requireNonNull(completedView.getAdapter()).notifyItemInserted(newIndex);
+                dialogInterface.dismiss();
+            });
+
+            builder.setNegativeButton("NO", (dialogInterface, i) -> dialogInterface.dismiss());
+
+            AlertDialog alert = builder.create();
+            alert.show();
         }
     }
 }
