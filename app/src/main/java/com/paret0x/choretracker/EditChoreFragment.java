@@ -3,25 +3,21 @@ package com.paret0x.choretracker;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.time.LocalDate;
@@ -51,11 +47,10 @@ public class EditChoreFragment extends Fragment {
 
         roomChoices = view.findViewById(R.id.fragment_editchore_room_dropdown);
         ArrayList<String> roomNames = Utilities.getInstance().getRoomNames();
-        roomNames.add(0, "Unassigned");
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, roomNames);
         roomChoices.setAdapter(adapter);
 
-        if ((existingChore != null) && (existingChore.roomId != -1)) {
+        if ((existingChore != null) && (existingChore.roomId != Utilities.getInstance().unassignedRoomId)) {
             String roomName = Utilities.getInstance().getRoomNameById(existingChore.roomId);
             if (roomName != null) {
                 roomChoices.setSelection(roomNames.indexOf(roomName));
@@ -115,8 +110,8 @@ public class EditChoreFragment extends Fragment {
             }
 
             String newRoom = roomChoices.getSelectedItem().toString();
-            int newRoomId = -1;
-            if (!newRoom.equals("Unassigned")) {
+            int newRoomId = Utilities.getInstance().unassignedRoomId;
+            if (!newRoom.equals("No Room Assigned")) {
                 newRoomId = Utilities.getInstance().getRoomIdByName(newRoom);
             }
 
@@ -197,6 +192,7 @@ public class EditChoreFragment extends Fragment {
                 dateLastDoneText.setText(newDate.toString());
             }, selectedDate.getYear(), selectedDate.getMonthValue(), selectedDate.getDayOfMonth());
             datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
+            datePickerDialog.getDatePicker().updateDate(selectedDate.getYear(), selectedDate.getMonthValue() - 1, selectedDate.getDayOfMonth());
             datePickerDialog.show();
         }
     };

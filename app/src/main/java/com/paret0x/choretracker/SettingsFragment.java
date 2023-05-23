@@ -81,7 +81,12 @@ class SettingsFragmentRoomListViewAdapter extends RecyclerView.Adapter<SettingsF
     public void onBindViewHolder(@NonNull SettingsFragmentRoomListViewHolder holder, int position) {
         HomeRoom r = Utilities.getInstance().getRoomAt(position);
         holder.roomNameView.setText(r.roomName);
-        holder.roomEditIcon.setOnClickListener(view1 -> SettingsFragment.openEditRoom(r));
+
+        if (r.roomId == Utilities.getInstance().unassignedRoomId) {
+            holder.roomEditIcon.setVisibility(View.GONE);
+        } else {
+            holder.roomEditIcon.setOnClickListener(view1 -> SettingsFragment.openEditRoom(r));
+        }
 
         ArrayList<Chore> choresInRoom = Utilities.getInstance().getChoresByRoom(r.roomId);
         holder.roomChoresGroup.setAdapter(new SettingsFragmentChoreListViewAdapter(choresInRoom));

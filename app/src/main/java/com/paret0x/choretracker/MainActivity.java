@@ -4,11 +4,9 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 interface FragmentChanger {
-    void openTasks();
     void openSettings();
     void openEditRoom(HomeRoom existingRoom);
     void openEditChore(Chore existingChore);
@@ -17,7 +15,6 @@ interface FragmentChanger {
 public class MainActivity extends FragmentActivity implements FragmentChanger{
     private ImageView actionButton;
     private TextView fragmentTitle;
-    private Fragment activeFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,7 +38,6 @@ public class MainActivity extends FragmentActivity implements FragmentChanger{
         actionButton.setOnClickListener(view -> openSettings());
 
         TasksFragment newFragment = new TasksFragment();
-        activeFragment = newFragment;
         getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, newFragment).commit();
     }
 
@@ -53,12 +49,11 @@ public class MainActivity extends FragmentActivity implements FragmentChanger{
         actionButton.setOnClickListener(view -> openTasks());
 
         SettingsFragment newFragment = new SettingsFragment();
-        activeFragment = newFragment;
         getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, newFragment).commit();
     }
 
     public void openEditRoom(HomeRoom existingRoom) {
-        String title = "";
+        String title;
         if (existingRoom == null) {
             title = "Add Room";
         } else {
@@ -71,12 +66,11 @@ public class MainActivity extends FragmentActivity implements FragmentChanger{
 
         EditRoomFragment newFragment = new EditRoomFragment();
         newFragment.setExistingRoom(existingRoom);
-        activeFragment = newFragment;
         getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, newFragment).commit();
     }
 
     public void openEditChore(Chore existingChore) {
-        String title = "";
+        String title;
         if (existingChore == null) {
             title = "Add Chore";
         } else {
@@ -89,7 +83,6 @@ public class MainActivity extends FragmentActivity implements FragmentChanger{
 
         EditChoreFragment newFragment = new EditChoreFragment();
         newFragment.setExistingChore(existingChore);
-        activeFragment = newFragment;
         getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, newFragment).commit();
     }
 }

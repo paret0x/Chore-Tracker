@@ -2,4 +2,21 @@
     <string name="app_name">Chore Tracker</string>
     <string name="enter_new_chore_here">Enter new chore here</string>
     <string name="chore_name_hint">Chore Name</string>
+    <string name="overdue">Overdue</string>
+    <string name="to_do">To Do</string>
+    <string name="done">Done</string>
+    <string name="chore_name">Chore Name</string>
+    <string name="name_default">Name</string>
+    <string name="room_name">Room Name</string>
+    <string name="frequency">Frequency</string>
+    <string name="month_shorthand">m</string>
+    <string name="week_shorthand">w</string>
+    <string name="day_shorthand">d</string>
+    <string name="date_last_done">Date last done</string>
+    <string name="date_default">Date</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="add_room">Add Room</string>
+    <string name="add_chore">Add Chore</string>
+
 </resources>

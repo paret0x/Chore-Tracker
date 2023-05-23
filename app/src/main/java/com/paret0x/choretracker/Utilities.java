@@ -7,7 +7,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
@@ -29,13 +28,13 @@ class TimeDiff {
 
 public class Utilities {
     private static Utilities instance;
+    public final int unassignedRoomId = -1;
     public boolean hasDatabaseLoaded = false;
     private final ArrayList<Chore> chores = new ArrayList<>();
     private final ArrayList<HomeRoom> rooms = new ArrayList<>();
     private final HashMap<ChoreStatus, ArrayList<Chore>> choresByStatus = new HashMap<>();
     private final HashMap<Integer, ArrayList<Chore>> choresByRoom = new HashMap<>();
     private final ExecutorService executorService = Executors.newFixedThreadPool(1);
-    public final long milliToDays = 1000 * 60 * 60 * 24;
 
     public static synchronized Utilities getInstance() {
         if (instance == null) {
@@ -48,6 +47,9 @@ public class Utilities {
         Log.i(this.getClass().getSimpleName(), "Populating utilities");
         chores.clear();
         rooms.clear();
+
+        rooms.add(new HomeRoom(unassignedRoomId, "No Room Assigned"));
+
         executorService.submit(() -> {
             Log.i(this.getClass().getSimpleName(), "Reading from database");
             chores.addAll(ChoreDatabase.getDatabase().choreDao().getChores());
@@ -90,7 +92,7 @@ public class Utilities {
 
     public void deleteRoom(HomeRoom r) {
         rooms.remove(r);
-        chores.forEach(chore -> chore.roomId = -1);
+        chores.forEach(chore -> chore.roomId = unassignedRoomId);
         executorService.submit(() -> ChoreDatabase.getDatabase().choreDao().deleteRoom(r));
     }
 
@@ -223,7 +225,7 @@ public class Utilities {
 
     public int getRoomIdByName(String roomName) {
         Optional<HomeRoom> foundRoom = rooms.stream().filter(room -> Objects.equals(room.roomName, roomName)).findAny();
-        return foundRoom.map(homeRoom -> homeRoom.roomId).orElse(-1);
+        return foundRoom.map(homeRoom -> homeRoom.roomId).orElse(unassignedRoomId);
     }
 
     public String getRoomNameById(int roomId) {

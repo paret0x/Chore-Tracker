@@ -25,7 +25,7 @@
             android:layout_weight="0.5"
             android:textSize="20sp"
             android:drawableStart="?attr/actionAddIcon"
-            android:text="Add Room"
+            android:text="@string/add_room"
             style="?android:attr/buttonBarButtonStyle" />
 
         <Button
@@ -35,7 +35,7 @@
             android:layout_weight="0.5"
             android:textSize="20sp"
             android:drawableStart="?attr/actionAddIcon"
-            android:text="Add Chore"
+            android:text="@string/add_chore"
             style="?android:attr/buttonBarButtonStyle"/>
 
     </LinearLayout>

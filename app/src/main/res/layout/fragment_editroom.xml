@@ -16,7 +16,7 @@
             android:textColor="@color/headerTextColor"
             android:textSize="18sp"
             android:padding="8dp"
-            android:text="Room Name"
+            android:text="@string/room_name"
             android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -32,7 +32,7 @@
             android:textColor="@color/itemTextColor"
             android:padding="8dp"
             android:textSize="16sp"
-            android:hint="Name"
+            android:hint="@string/name_default"
             android:textColorHint="@color/gray"
             android:importantForAutofill="no" />
 
@@ -54,7 +54,7 @@
             android:layout_height="60dp"
             android:layout_weight="0.5"
             android:textSize="20sp"
-            android:text="Save"
+            android:text="@string/save"
             android:drawableStart="?attr/actionSaveIcon"
             style="?android:attr/buttonBarButtonStyle" />
 
@@ -64,7 +64,7 @@
             android:layout_height="60dp"
             android:layout_weight="0.5"
             android:textSize="20sp"
-            android:text="Delete"
+            android:text="@string/delete"
             android:drawableStart="?attr/actionDeleteIcon"
             style="?android:attr/buttonBarButtonStyle"/>
 
