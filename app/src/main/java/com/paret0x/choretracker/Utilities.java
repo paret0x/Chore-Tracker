@@ -1,5 +1,7 @@
 package com.paret0x.choretracker;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import android.util.Log;
 
@@ -57,11 +59,7 @@ public class Utilities {
 
     /* ===== Database ===== */
     public void addChore(Chore c) {
-        final int choreId = (chores.size() > 0) ? (chores.get(chores.size() - 1).choreId + 1) : 1;
-        long dateLastDone = Calendar.getInstance().getTime().getTime() / milliToDays;
-        c.choreId = choreId;
-        c.dateLastDone = dateLastDone;
-        Log.i(this.getClass().getSimpleName(), c.choreName + ": Time chore last done: " + dateLastDone);
+        c.choreId = (chores.size() > 0) ? (chores.get(chores.size() - 1).choreId + 1) : 1;
         chores.add(c);
         executorService.submit(() -> ChoreDatabase.getDatabase().choreDao().insertChore(c));
     }
@@ -92,6 +90,7 @@ public class Utilities {
 
     public void deleteRoom(HomeRoom r) {
         rooms.remove(r);
+        chores.forEach(chore -> chore.roomId = -1);
         executorService.submit(() -> ChoreDatabase.getDatabase().choreDao().deleteRoom(r));
     }
 
@@ -234,10 +233,11 @@ public class Utilities {
 
     /* ===== TimeDiff ===== */
     public TimeDiff getTimeDiffForChore(Chore c) {
-        long currentTime = Calendar.getInstance().getTime().getTime() / milliToDays;
-        long difference = currentTime - c.dateLastDone;
+        LocalDate currentTime = LocalDate.now();
+        LocalDate dateLastDone = LocalDate.parse(c.dateLastDone);
 
-        return getTimeDiff(difference);
+        long daysElapsed = ChronoUnit.DAYS.between(dateLastDone, currentTime);
+        return getTimeDiff(daysElapsed);
     }
 
     public TimeDiff getTimeDiff(long duration) {

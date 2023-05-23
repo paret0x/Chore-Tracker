@@ -33,9 +33,9 @@ class Chore {
     long frequency; // in days
 
     @ColumnInfo(name = "last_done")
-    long dateLastDone; // seconds since epoch
+    String dateLastDone; // seconds since epoch
 
-    public Chore(int choreId, String choreName, int roomId, long frequency, long dateLastDone) {
+    public Chore(int choreId, String choreName, int roomId, long frequency, String dateLastDone) {
         this.choreId = choreId;
         this.choreName = choreName;
         this.roomId = roomId;

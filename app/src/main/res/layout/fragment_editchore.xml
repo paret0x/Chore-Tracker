@@ -122,6 +122,58 @@
 
         <View style="@style/Divider"/>
 
+        <FrameLayout
+            android:padding="8dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/fragment_editchore_date_text"
+                android:layout_gravity="start|center_vertical"
+                android:textSize="16sp"
+                android:textColor="@color/headerTextColor"
+                android:text="Date last done"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp">
+
+                <EditText
+                    android:id="@+id/fragment_editchore_date_edit"
+                    android:maxLines="1"
+                    android:lines="1"
+                    android:layout_width="160dp"
+                    android:layout_height="48dp"
+                    android:inputType="date"
+                    android:textColor="@color/itemTextColor"
+                    android:padding="8dp"
+                    android:textSize="16sp"
+                    android:maxLength="10"
+                    android:hint="Date"
+                    android:textColorHint="@color/gray"
+                    android:importantForAutofill="no"/>
+
+                <ImageView
+                    android:id="@+id/fragment_editchore_date_button"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="4dp"
+                    android:layout_height="wrap_content"
+                    android:src="?attr/actionCalendarIcon" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <View style="@style/Divider"/>
+
     </LinearLayout>
 
     <LinearLayout
