@@ -1,24 +1,31 @@
 package com.paret0x.choretracker;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.time.LocalDate;
+import java.util.Date;
 
 public class EditChoreFragment extends Fragment {
     protected Chore existingChore = null;
@@ -29,6 +36,7 @@ public class EditChoreFragment extends Fragment {
     private NumberPicker monthFrequency;
     private NumberPicker weekFrequency;
     private NumberPicker dayFrequency;
+    private EditText dateLastDoneText;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,6 +81,15 @@ public class EditChoreFragment extends Fragment {
             dayFrequency.setValue(frequency.days);
         }
 
+        dateLastDoneText = view.findViewById(R.id.fragment_editchore_date_edit);
+
+        ImageView calendarButton = view.findViewById(R.id.fragment_editchore_date_button);
+        calendarButton.setOnClickListener(calendarButtonListener);
+
+        if (existingChore != null) {
+            dateLastDoneText.setText(existingChore.dateLastDone);
+        }
+
         Button saveButton = view.findViewById(R.id.fragment_editchore_save);
         Button deleteButton = view.findViewById(R.id.fragment_editchore_delete);
 
@@ -92,7 +109,7 @@ public class EditChoreFragment extends Fragment {
         public void onClick(View view) {
             String newName = nameField.getText().toString();
             if (newName.isEmpty()) {
-                Toast toast = Toast.makeText(EditChoreFragment.this.getContext(), "Chore missing name", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(getContext(), "Chore missing name", Toast.LENGTH_SHORT);
                 toast.show();
                 return;
             }
@@ -108,18 +125,29 @@ public class EditChoreFragment extends Fragment {
             int days = dayFrequency.getValue();
             long newFrequency = (months * 30L) + (weeks * 7L) + days;
             if (newFrequency == 0L) {
-                Toast toast = Toast.makeText(EditChoreFragment.this.getContext(), "Chore missing frequency", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(getContext(), "Chore missing frequency", Toast.LENGTH_SHORT);
+                toast.show();
+                return;
+            }
+
+            String dateLastDoneStr = dateLastDoneText.getText().toString();
+            LocalDate dateLastDone;
+            try {
+                dateLastDone = LocalDate.parse(dateLastDoneStr);
+            } catch (DateTimeParseException e) {
+                Toast toast = Toast.makeText(getContext(), "Chore missing last done date", Toast.LENGTH_SHORT);
                 toast.show();
                 return;
             }
 
             if (existingChore == null) {
-                Chore newChore = new Chore(0, newName, newRoomId, newFrequency, 0);
+                Chore newChore = new Chore(0, newName, newRoomId, newFrequency, dateLastDone.toString());
                 Utilities.getInstance().addChore(newChore);
             } else {
                 existingChore.choreName = newName;
                 existingChore.roomId = newRoomId;
                 existingChore.frequency = newFrequency;
+                existingChore.dateLastDone = dateLastDone.toString();
 
                 Utilities.getInstance().updateChore(existingChore);
             }
@@ -151,6 +179,25 @@ public class EditChoreFragment extends Fragment {
 
             AlertDialog alert = builder.create();
             alert.show();
+        }
+    };
+
+    private final View.OnClickListener calendarButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            LocalDate selectedDate;
+            if (existingChore == null) {
+                selectedDate = LocalDate.now();
+            } else {
+                selectedDate = LocalDate.parse(existingChore.dateLastDone);
+            }
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),  (view1, year, monthOfYear, dayOfMonth) -> {
+                LocalDate newDate = LocalDate.of(year, monthOfYear + 1, dayOfMonth);
+                dateLastDoneText.setText(newDate.toString());
+            }, selectedDate.getYear(), selectedDate.getMonthValue(), selectedDate.getDayOfMonth());
+            datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
+            datePickerDialog.show();
         }
     };
 

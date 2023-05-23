@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
@@ -188,7 +189,7 @@ public class TasksFragment extends Fragment {
             builder.setTitle("Has the task \"" + chore.choreName + "\" been completed?");
 
             builder.setPositiveButton("YES", (dialogInterface, i) -> {
-                this.chore.dateLastDone = (Calendar.getInstance().getTime().getTime() / Utilities.getInstance().milliToDays);
+                this.chore.dateLastDone = LocalDate.now().toString();
 
                 ChoreStatus status = Utilities.getInstance().getChoreStatus(this.chore.choreId);
                 int oldIndex = Utilities.getInstance().getChoreStatusIndex(this.chore.choreId);
