@@ -20,10 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 class TasksFragmentListViewHolder extends RecyclerView.ViewHolder {
     public TextView choreNameView;
@@ -128,19 +125,19 @@ public class TasksFragment extends Fragment {
         Utilities.getInstance().updateChoreStatuses();
 
         LinearLayout overdueParent = view.findViewById(R.id.fragment_active_overdue);
-        ((TextView)overdueParent.findViewById(R.id.fragment_active_group_text)).setText("OVERDUE");
+        ((TextView)overdueParent.findViewById(R.id.fragment_active_group_text)).setText(R.string.overdue);
         overdueView = overdueParent.findViewById(R.id.fragment_active_group_item_view);
         overdueView.setAdapter(new TasksFragmentListViewAdapter(ChoreStatus.OVERDUE));
         overdueView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
         LinearLayout activeParent = view.findViewById(R.id.fragment_active_ongoing);
-        ((TextView)activeParent.findViewById(R.id.fragment_active_group_text)).setText("TO DO");
+        ((TextView)activeParent.findViewById(R.id.fragment_active_group_text)).setText(R.string.to_do);
         activeView = activeParent.findViewById(R.id.fragment_active_group_item_view);
         activeView.setAdapter(new TasksFragmentListViewAdapter(ChoreStatus.ONGOING));
         activeView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
         LinearLayout completedParent = view.findViewById(R.id.fragment_active_completed);
-        ((TextView)completedParent.findViewById(R.id.fragment_active_group_text)).setText("DONE");
+        ((TextView)completedParent.findViewById(R.id.fragment_active_group_text)).setText(R.string.done);
         completedView = completedParent.findViewById(R.id.fragment_active_group_item_view);
         completedView.setAdapter(new TasksFragmentListViewAdapter(ChoreStatus.COMPLETED));
         completedView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));

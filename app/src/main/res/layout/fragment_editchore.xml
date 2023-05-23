@@ -13,7 +13,7 @@
         <TextView
             android:id="@+id/fragment_editchore_name_text"
             android:textSize="18sp"
-            android:text="Chore Name"
+            android:text="@string/chore_name"
             android:padding="8dp"
             android:textColor="@color/headerTextColor"
             android:layout_gravity="center"
@@ -30,7 +30,7 @@
             android:textColor="@color/itemTextColor"
             android:padding="8dp"
             android:textSize="16sp"
-            android:hint="Name"
+            android:hint="@string/name_default"
             android:textColorHint="@color/gray"
             android:importantForAutofill="no"/>
 
@@ -46,7 +46,7 @@
                 android:layout_gravity="start|center_vertical"
                 android:textSize="16sp"
                 android:textColor="@color/headerTextColor"
-                android:text="Room"
+                android:text="@string/room_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
@@ -70,8 +70,8 @@
                 android:layout_gravity="start|center_vertical"
                 android:textSize="16sp"
                 android:textColor="@color/headerTextColor"
-                android:text="Frequency"
-                android:layout_width="match_parent"
+                android:text="@string/frequency"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"/>
 
             <LinearLayout
@@ -90,7 +90,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="m"/>
+                    android:text="@string/month_shorthand"/>
 
                 <NumberPicker
                     android:id="@+id/fragment_editchore_freq_weeks"
@@ -102,7 +102,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="w"/>
+                    android:text="@string/week_shorthand"/>
 
                 <NumberPicker
                     android:id="@+id/fragment_editchore_freq_days"
@@ -114,7 +114,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="d"/>
+                    android:text="@string/day_shorthand"/>
 
             </LinearLayout>
 
@@ -134,8 +134,8 @@
                 android:layout_gravity="start|center_vertical"
                 android:textSize="16sp"
                 android:textColor="@color/headerTextColor"
-                android:text="Date last done"
-                android:layout_width="match_parent"
+                android:text="@string/date_last_done"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"/>
 
             <LinearLayout
@@ -156,7 +156,7 @@
                     android:padding="8dp"
                     android:textSize="16sp"
                     android:maxLength="10"
-                    android:hint="Date"
+                    android:hint="@string/date_default"
                     android:textColorHint="@color/gray"
                     android:importantForAutofill="no"/>
 
@@ -190,7 +190,7 @@
             android:layout_height="60dp"
             android:layout_weight="0.5"
             android:textSize="20sp"
-            android:text="Save"
+            android:text="@string/save"
             android:drawableStart="?attr/actionSaveIcon"
             style="?android:attr/buttonBarButtonStyle" />
 
@@ -200,7 +200,7 @@
             android:layout_height="60dp"
             android:layout_weight="0.5"
             android:textSize="20sp"
-            android:text="Delete"
+            android:text="@string/delete"
             android:drawableStart="?attr/actionDeleteIcon"
             style="?android:attr/buttonBarButtonStyle"/>
 
