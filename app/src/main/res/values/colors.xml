@@ -18,4 +18,5 @@
     <color name="backgroundColor">@color/white</color>
     <color name="dividerColor">@color/alto</color>
     <color name="redTextColor">@color/cinnabar</color>
+    <color name="actionBackgroundColor">@color/concrete</color>
 </resources>
