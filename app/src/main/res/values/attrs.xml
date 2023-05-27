@@ -9,5 +9,6 @@
         <attr name="actionSaveIcon" format="reference" />
         <attr name="actionDeleteIcon" format="reference" />
         <attr name="actionCalendarIcon" format="reference" />
+        <attr name="actionForwardIcon" format="reference" />
     </declare-styleable>
 </resources>

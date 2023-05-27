@@ -13,6 +13,7 @@
         <item name="actionSaveIcon">@drawable/icon_save</item>
         <item name="actionDeleteIcon">@drawable/icon_delete</item>
         <item name="actionCalendarIcon">@drawable/icon_calendar</item>
+        <item name="actionForwardIcon">@drawable/icon_forward</item>
     </style>
 
     <style name="Divider">
