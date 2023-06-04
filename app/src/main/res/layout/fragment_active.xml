@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/fragment_active"
-    android:orientation="vertical">
+    android:id="@+id/fragment_active">
 
-    <include
-        layout="@layout/fragment_active_group"
-        android:id="@+id/fragment_active_overdue"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <include
-        layout="@layout/fragment_active_group"
-        android:id="@+id/fragment_active_ongoing"/>
+        <include
+            layout="@layout/fragment_active_group"
+            android:id="@+id/fragment_active_overdue"/>
 
-    <include
-        layout="@layout/fragment_active_group"
-        android:id="@+id/fragment_active_completed"/>
+        <include
+            layout="@layout/fragment_active_group"
+            android:id="@+id/fragment_active_ongoing"/>
 
-</LinearLayout>
+        <include
+            layout="@layout/fragment_active_group"
+            android:id="@+id/fragment_active_completed"/>
+
+    </LinearLayout>
+
+</ScrollView>

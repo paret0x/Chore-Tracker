@@ -7,6 +7,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
@@ -56,12 +57,16 @@ public class Utilities {
             rooms.addAll(ChoreDatabase.getDatabase().choreDao().getRooms());
             hasDatabaseLoaded = true;
             Log.i(this.getClass().getSimpleName(), "Done reading from database");
+            sortRoomsByName();
         });
     }
 
     /* ===== Database ===== */
+    public int getNextChoreId() {
+        return (chores.size() > 0) ? (chores.get(chores.size() - 1).choreId + 1) : 1;
+    }
+
     public void addChore(Chore c) {
-        c.choreId = (chores.size() > 0) ? (chores.get(chores.size() - 1).choreId + 1) : 1;
         chores.add(c);
         executorService.submit(() -> ChoreDatabase.getDatabase().choreDao().insertChore(c));
     }
@@ -77,22 +82,30 @@ public class Utilities {
         executorService.submit(() -> ChoreDatabase.getDatabase().choreDao().deleteChore(c));
     }
 
-    public void addRoom(final String roomName) {
-        final int roomId = (rooms.size() > 0) ? (rooms.get(rooms.size() - 1).roomId + 1) : 1;
-        HomeRoom r = new HomeRoom(roomId, roomName);
+    public int getNextRoomId() {
+        return (rooms.size() > 0) ? (rooms.get(rooms.size() - 1).roomId + 1) : 1;
+    }
+
+    public void addRoom(HomeRoom r) {
         rooms.add(r);
         executorService.submit(() -> ChoreDatabase.getDatabase().choreDao().insertRoom(r));
+        sortRoomsByName();
     }
 
     public void updateRoom(HomeRoom r) {
         Optional<HomeRoom> foundRoom = rooms.stream().filter(room -> room.roomId == r.roomId).findAny();
         foundRoom.ifPresent(room -> rooms.set(rooms.indexOf(room), r));
         executorService.submit(() -> ChoreDatabase.getDatabase().choreDao().updateRoom(r));
+        sortRoomsByName();
     }
 
     public void deleteRoom(HomeRoom r) {
         rooms.remove(r);
-        chores.forEach(chore -> chore.roomId = unassignedRoomId);
+        chores.forEach(chore -> {
+            if (chore.roomId == r.roomId) {
+                chore.roomId = unassignedRoomId;
+            }
+        });
         executorService.submit(() -> ChoreDatabase.getDatabase().choreDao().deleteRoom(r));
     }
 
@@ -185,6 +198,10 @@ public class Utilities {
     }
 
     /* ===== HomeRoom ===== */
+    public void sortRoomsByName() {
+        rooms.subList(1, rooms.size()).sort(Comparator.comparing(r -> r.roomName));
+    }
+
     public int getNumRooms() {
         return rooms.size();
     }
