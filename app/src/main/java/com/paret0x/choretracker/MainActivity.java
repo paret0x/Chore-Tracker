@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.FragmentActivity;
 
 interface FragmentChanger {
@@ -30,12 +31,22 @@ public class MainActivity extends FragmentActivity implements FragmentChanger{
         openTasks();
     }
 
+    private void setBackButtonAction(Runnable action) {
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                action.run();
+            }
+        });
+    }
+
     public void openTasks() {
         String title = "Current Chores";
         fragmentTitle.setText(title);
 
         actionButton.setImageResource(R.drawable.icon_settings);
         actionButton.setOnClickListener(view -> openSettings());
+        setBackButtonAction(this::finish);
 
         TasksFragment newFragment = new TasksFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, newFragment).commit();
@@ -47,6 +58,7 @@ public class MainActivity extends FragmentActivity implements FragmentChanger{
 
         actionButton.setImageResource(R.drawable.icon_return);
         actionButton.setOnClickListener(view -> openTasks());
+        setBackButtonAction(this::openTasks);
 
         SettingsFragment newFragment = new SettingsFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, newFragment).commit();
@@ -63,6 +75,7 @@ public class MainActivity extends FragmentActivity implements FragmentChanger{
 
         actionButton.setImageResource(R.drawable.icon_return);
         actionButton.setOnClickListener(view -> openSettings());
+        setBackButtonAction(this::openSettings);
 
         EditRoomFragment newFragment = new EditRoomFragment();
         newFragment.setExistingRoom(existingRoom);
@@ -80,6 +93,7 @@ public class MainActivity extends FragmentActivity implements FragmentChanger{
 
         actionButton.setImageResource(R.drawable.icon_return);
         actionButton.setOnClickListener(view -> openSettings());
+        setBackButtonAction(this::openSettings);
 
         EditChoreFragment newFragment = new EditChoreFragment();
         newFragment.setExistingChore(existingChore);

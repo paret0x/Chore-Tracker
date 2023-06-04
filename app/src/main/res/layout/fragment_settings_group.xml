@@ -32,7 +32,7 @@
 
     </FrameLayout>
 
-    <View style="@style/Divider"/>
+    <View style="@style/HorizontalDivider"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fragment_settings_roomgroup_item_view"

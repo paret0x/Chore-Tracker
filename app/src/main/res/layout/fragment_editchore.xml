@@ -34,7 +34,7 @@
             android:textColorHint="@color/gray"
             android:importantForAutofill="no"/>
 
-        <View style="@style/Divider"/>
+        <View style="@style/HorizontalDivider"/>
 
         <FrameLayout
             android:padding="8dp"
@@ -58,7 +58,7 @@
 
         </FrameLayout>
 
-        <View style="@style/Divider"/>
+        <View style="@style/HorizontalDivider"/>
 
         <FrameLayout
             android:padding="8dp"
@@ -120,7 +120,7 @@
 
         </FrameLayout>
 
-        <View style="@style/Divider"/>
+        <View style="@style/HorizontalDivider"/>
 
         <FrameLayout
             android:padding="8dp"
@@ -172,37 +172,48 @@
 
         </FrameLayout>
 
-        <View style="@style/Divider"/>
+        <View style="@style/HorizontalDivider"/>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:weightSum="1.0"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal" >
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true" >
 
-        <Button
-            android:id="@+id/fragment_editchore_save"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_weight="0.5"
-            android:textSize="20sp"
-            android:text="@string/save"
-            android:drawableStart="?attr/actionSaveIcon"
-            style="?android:attr/buttonBarButtonStyle" />
+        <View style="@style/HorizontalDivider"/>
 
-        <Button
-            android:id="@+id/fragment_editchore_delete"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_weight="0.5"
-            android:textSize="20sp"
-            android:text="@string/delete"
-            android:drawableStart="?attr/actionDeleteIcon"
-            style="?android:attr/buttonBarButtonStyle"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:weightSum="1.0"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/fragment_editchore_save"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="0.5"
+                android:textSize="20sp"
+                android:text="@string/save"
+                android:drawableStart="?attr/actionSaveIcon"
+                style="?android:attr/buttonBarButtonStyle" />
+
+            <View style="@style/VerticalDivider"/>
+
+            <Button
+                android:id="@+id/fragment_editchore_delete"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="0.5"
+                android:textSize="20sp"
+                android:text="@string/delete"
+                android:drawableStart="?attr/actionDeleteIcon"
+                style="?android:attr/buttonBarButtonStyle"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
