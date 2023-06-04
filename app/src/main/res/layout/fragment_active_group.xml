@@ -22,7 +22,7 @@
 
     </LinearLayout>
 
-    <View style="@style/Divider"/>
+    <View style="@style/HorizontalDivider"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fragment_active_group_item_view"

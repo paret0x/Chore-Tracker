@@ -36,7 +36,7 @@
 
     </FrameLayout>
 
-    <View style="@style/Divider"/>
+    <View style="@style/HorizontalDivider"/>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment_activity_main"

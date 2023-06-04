@@ -8,35 +8,47 @@
         android:id="@+id/fragment_settings_roomgroup_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="60dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal"
-        android:weightSum="1.0"
+        android:orientation="vertical"
         android:layout_alignParentBottom="true" >
 
-        <Button
-            android:id="@+id/fragment_settings_addroombutton"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_weight="0.5"
-            android:textSize="20sp"
-            android:drawableStart="?attr/actionAddIcon"
-            android:text="@string/add_room"
-            style="?android:attr/buttonBarButtonStyle" />
+        <View style="@style/HorizontalDivider"/>
 
-        <Button
-            android:id="@+id/fragment_settings_addchorebutton"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_weight="0.5"
-            android:textSize="20sp"
-            android:drawableStart="?attr/actionAddIcon"
-            android:text="@string/add_chore"
-            style="?android:attr/buttonBarButtonStyle"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="1.0" >
+
+            <Button
+                android:id="@+id/fragment_settings_addroombutton"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="0.5"
+                android:textSize="20sp"
+                android:drawableStart="?attr/actionAddIcon"
+                android:text="@string/add_room"
+                style="?android:attr/buttonBarButtonStyle" />
+
+            <View style="@style/VerticalDivider"/>
+
+            <Button
+                android:id="@+id/fragment_settings_addchorebutton"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="0.5"
+                android:textSize="20sp"
+                android:drawableStart="?attr/actionAddIcon"
+                android:text="@string/add_chore"
+                style="?android:attr/buttonBarButtonStyle"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

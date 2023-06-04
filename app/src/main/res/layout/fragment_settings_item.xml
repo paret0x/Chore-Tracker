@@ -41,7 +41,7 @@
 
     </FrameLayout>
 
-    <View style="@style/Divider"/>
+    <View style="@style/HorizontalDivider"/>
 
 </LinearLayout>
 
