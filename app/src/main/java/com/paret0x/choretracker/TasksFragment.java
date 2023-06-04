@@ -24,15 +24,17 @@ import java.util.Objects;
 
 class TasksFragmentListViewHolder extends RecyclerView.ViewHolder {
     public TextView choreNameView;
-    public ImageView choreCompleteView;
+    public TextView choreRoomView;
     public TextView choreTimeView;
+    public ImageView choreCompleteView;
 
     public TasksFragmentListViewHolder(@NonNull View itemView) {
         super(itemView);
 
         this.choreNameView = itemView.findViewById(R.id.fragment_active_chore_name);
-        this.choreCompleteView = itemView.findViewById(R.id.fragment_active_chore_finish);
+        this.choreRoomView = itemView.findViewById(R.id.fragment_active_chore_room);
         this.choreTimeView = itemView.findViewById(R.id.fragment_active_chore_time);
+        this.choreCompleteView = itemView.findViewById(R.id.fragment_active_chore_finish);
     }
 }
 
@@ -66,6 +68,7 @@ class TasksFragmentListViewAdapter extends RecyclerView.Adapter<TasksFragmentLis
     public void onBindViewHolder(@NonNull TasksFragmentListViewHolder holder, int position) {
         Chore c = Utilities.getInstance().getChoreByStatusIndex(this.status, position);
         String choreName = c.choreName;
+        String roomName = Utilities.getInstance().getRoomNameById(c.roomId);
 
         TimeDiff diff = Utilities.getInstance().getTimeDiffForChore(c);
         if (diff == null) {
@@ -90,6 +93,7 @@ class TasksFragmentListViewAdapter extends RecyclerView.Adapter<TasksFragmentLis
         }
 
         holder.choreNameView.setText(choreName);
+        holder.choreRoomView.setText(roomName);
         holder.choreNameView.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), choreNameColor));
         holder.choreCompleteView.setOnClickListener(view -> {
             TasksFragment.TasksFragmentConfirmDialog dialog = new TasksFragment.TasksFragmentConfirmDialog(holder.choreNameView.getContext(), c);

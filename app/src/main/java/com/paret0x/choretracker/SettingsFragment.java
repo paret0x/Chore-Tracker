@@ -85,6 +85,7 @@ class SettingsFragmentRoomListViewAdapter extends RecyclerView.Adapter<SettingsF
         if (r.roomId == Utilities.getInstance().unassignedRoomId) {
             holder.roomEditIcon.setVisibility(View.GONE);
         } else {
+            holder.roomEditIcon.setVisibility(View.VISIBLE);
             holder.roomEditIcon.setOnClickListener(view1 -> SettingsFragment.openEditRoom(r));
         }
 
