@@ -110,10 +110,7 @@ public class EditChoreFragment extends Fragment {
             }
 
             String newRoom = roomChoices.getSelectedItem().toString();
-            int newRoomId = Utilities.getInstance().unassignedRoomId;
-            if (!newRoom.equals("No Room Assigned")) {
-                newRoomId = Utilities.getInstance().getRoomIdByName(newRoom);
-            }
+            int newRoomId = Utilities.getInstance().getRoomIdByName(newRoom);
 
             int months = monthFrequency.getValue();
             int weeks = weekFrequency.getValue();
@@ -136,8 +133,9 @@ public class EditChoreFragment extends Fragment {
             }
 
             if (existingChore == null) {
-                Chore newChore = new Chore(0, newName, newRoomId, newFrequency, dateLastDone.toString());
-                Utilities.getInstance().addChore(newChore);
+                int choreId = Utilities.getInstance().getNextChoreId();
+                existingChore = new Chore(choreId, newName, newRoomId, newFrequency, dateLastDone.toString());
+                Utilities.getInstance().addChore(existingChore);
             } else {
                 existingChore.choreName = newName;
                 existingChore.roomId = newRoomId;

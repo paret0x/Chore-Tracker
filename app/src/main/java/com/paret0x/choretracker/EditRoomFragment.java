@@ -54,7 +54,9 @@ public class EditRoomFragment extends Fragment {
             }
 
             if (existingRoom == null) {
-                Utilities.getInstance().addRoom(newName);
+                int roomId = Utilities.getInstance().getNextRoomId();
+                existingRoom = new HomeRoom(roomId, newName);
+                Utilities.getInstance().addRoom(existingRoom);
             } else {
                 existingRoom.roomName = newName;
                 Utilities.getInstance().updateRoom(existingRoom);

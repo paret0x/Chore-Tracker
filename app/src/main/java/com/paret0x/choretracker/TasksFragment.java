@@ -128,19 +128,34 @@ public class TasksFragment extends Fragment {
         ((TextView)overdueParent.findViewById(R.id.fragment_active_group_text)).setText(R.string.overdue);
         overdueView = overdueParent.findViewById(R.id.fragment_active_group_item_view);
         overdueView.setAdapter(new TasksFragmentListViewAdapter(ChoreStatus.OVERDUE));
-        overdueView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        overdueView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
 
         LinearLayout activeParent = view.findViewById(R.id.fragment_active_ongoing);
         ((TextView)activeParent.findViewById(R.id.fragment_active_group_text)).setText(R.string.to_do);
         activeView = activeParent.findViewById(R.id.fragment_active_group_item_view);
         activeView.setAdapter(new TasksFragmentListViewAdapter(ChoreStatus.ONGOING));
-        activeView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        activeView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
 
         LinearLayout completedParent = view.findViewById(R.id.fragment_active_completed);
         ((TextView)completedParent.findViewById(R.id.fragment_active_group_text)).setText(R.string.done);
         completedView = completedParent.findViewById(R.id.fragment_active_group_item_view);
         completedView.setAdapter(new TasksFragmentListViewAdapter(ChoreStatus.COMPLETED));
-        completedView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        completedView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
 
         if (!wasDatabaseReadyOnLoad) {
             reloadViews();
